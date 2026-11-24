@@ -34,7 +34,7 @@ input,select,textarea{width:100%;font:inherit;padding:11px;border-radius:10px;bo
 .msg{text-align:center;color:var(--mut);padding:30px 10px}
 </style></head><body>
 <main>
-<h1>💶 Contas da Família <small style="font-weight:400;color:var(--mut);font-size:12px">v5</small></h1>
+<h1>💶 Contas da Família <small style="font-weight:400;color:var(--mut);font-size:12px">v6</small></h1>
 <div id="app"><div class="msg">A carregar…</div></div>
 </main>
 <button class="fab" id="add" style="display:none">+ Novo pagamento</button>
@@ -172,9 +172,9 @@ $("#sv").onclick=function(){
   if(!name||isNaN(amt)||!due){dlg("Preencha o nome, o valor e a data.");return}
   var data={att:fAtt.slice(),name:name,cat:$("#fc").value,who:$("#fp").value==="__new"?"Geral":$("#fp").value,amount:amt,freq:$("#ff").value,due:due,warn:parseInt($("#fw").value,10)};
   var p=editId?col.doc(editId).update(data):col.add(data);
-  p.then(closeForm).catch(function(){dlg("Não foi possível guardar. Confirme que tem permissão de edição.")})
+  closeForm();p.catch(function(){dlg("Não foi possível guardar. Confirme que tem permissão de edição.")})
 };
-$("#dl").onclick=function(){dlg("Eliminar este pagamento?",function(){col.doc(editId).delete().then(closeForm).catch(function(){dlg("Sem permissão para eliminar.")})})};
+$("#dl").onclick=function(){dlg("Eliminar este pagamento?",function(){var id=editId;closeForm();col.doc(id).delete().catch(function(){dlg("Não foi possível eliminar.")})})};
 $("#ov").onclick=function(e){if(e.target.id==="ov")closeForm()};
 $("#app").onclick=function(e){
   var t=e.target.closest("[data-pay],[data-edit],[data-view],[data-cat],[data-who],[data-ics]");if(!t)return;if(t.dataset.view){view=t.dataset.view;render();return}if(t.dataset.cat){catF=t.dataset.cat;render();return}if(t.dataset.who){pF=t.dataset.who;render();return}if(t.dataset.ics){exportIcs();return}
