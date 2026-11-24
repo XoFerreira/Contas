@@ -59,6 +59,7 @@ input,select,textarea{width:100%;font:inherit;padding:11px;border-radius:10px;bo
 <div class="ov" id="cv" style="z-index:9"><div class="sheet"><p id="cm"></p><div class="row"><button class="g" id="cn">Cancelar</button><button id="cy">OK</button></div></div></div>
 <div id="login" style="position:fixed;inset:0;z-index:20;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center"><div style="font-size:48px">💶</div><h1>Contas da Família</h1><button id="lg">Entrar com Google</button><div class="sub" id="lm"></div></div>
 <script>
+window.addEventListener("error",function(e){var L=document.getElementById("login"),M=document.getElementById("lm");if(L){L.style.display="flex";M.textContent="Erro: "+(e.message||"não foi possível carregar o Firebase")}},true);
 window.claude={use:function(n){return new Promise(function(r){(function w(){if(window.__fbUse)r(window.__fbUse(n));else setTimeout(w,100)})()})}};
 </script>
 <script type="module">
