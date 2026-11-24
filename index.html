@@ -34,7 +34,7 @@ input,select,textarea{width:100%;font:inherit;padding:11px;border-radius:10px;bo
 .msg{text-align:center;color:var(--mut);padding:30px 10px}
 </style></head><body>
 <main>
-<h1>💶 Contas da Família <small style="font-weight:400;color:var(--mut);font-size:12px">v3</small></h1>
+<h1>💶 Contas da Família <small style="font-weight:400;color:var(--mut);font-size:12px">v4</small></h1>
 <div id="app"><div class="msg">A carregar…</div></div>
 </main>
 <button class="fab" id="add" style="display:none">+ Novo pagamento</button>
@@ -60,7 +60,6 @@ input,select,textarea{width:100%;font:inherit;padding:11px;border-radius:10px;bo
 <div id="login" style="position:fixed;inset:0;z-index:20;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center"><div style="font-size:48px">💶</div><h1>Contas da Família</h1><button id="lg">Entrar com Google</button><div class="sub" id="lm"></div></div>
 <script>
 window.addEventListener("error",function(e){var L=document.getElementById("login"),M=document.getElementById("lm");if(L){L.style.display="flex";M.textContent="Erro: "+(e.message||"não foi possível carregar o Firebase")}},true);
-setTimeout(function(){var L=document.getElementById("login"),M=document.getElementById("lm");if(!window.__fbUse&&L&&L.style.display!=="flex"){L.style.display="flex";M.textContent="Erro: o Firebase não respondeu. Abra a consola do browser (F12) para ver o motivo."}},6000);
 window.claude={use:function(n){return new Promise(function(r){(function w(){if(window.__fbUse)r(window.__fbUse(n));else setTimeout(w,100)})()})}};
 </script>
 <script type="module">
@@ -72,7 +71,7 @@ const cfg={apiKey:"AIzaSyBBs2pK94-brwfjFwypE87yvK8HlBRlPB0",authDomain:"contas-f
 /* ============================================================ */
 const app=initializeApp(cfg),auth=getAuth(app),fs=initializeFirestore(app,{localCache:persistentLocalCache()});
 const L=document.getElementById("login"),M=document.getElementById("lm");
-document.getElementById("lg").onclick=async()=>{const p=new GoogleAuthProvider();try{await signInWithPopup(auth,p)}catch(e){if(e.code!=="auth/popup-closed-by-user"){try{await signInWithRedirect(auth,p)}catch(x){M.textContent="Erro: "+x.code}}}};
+document.getElementById("lg").onclick=async()=>{M.textContent="A abrir o login…";const p=new GoogleAuthProvider();try{await signInWithPopup(auth,p)}catch(e){M.textContent="Erro de login: "+(e.code||e.message)}};
 const snapD=s=>({docs:s.docs.map(d=>({id:d.id,data:()=>d.data()}))});
 function mk(user){
   const col=n=>{const c=collection(fs,n);return {onSnapshot:(cb,er)=>onSnapshot(c,s=>cb(snapD(s)),er),add:d=>addDoc(c,d),doc:i=>{const r=doc(fs,n,i);return {update:d=>updateDoc(r,d),set:d=>setDoc(r,d),delete:()=>deleteDoc(r)}}}};
