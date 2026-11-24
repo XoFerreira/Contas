@@ -34,7 +34,7 @@ input,select,textarea{width:100%;font:inherit;padding:11px;border-radius:10px;bo
 .msg{text-align:center;color:var(--mut);padding:30px 10px}
 </style></head><body>
 <main>
-<h1>💶 Contas da Família <small style="font-weight:400;color:var(--mut);font-size:12px">v4</small></h1>
+<h1>💶 Contas da Família <small style="font-weight:400;color:var(--mut);font-size:12px">v5</small></h1>
 <div id="app"><div class="msg">A carregar…</div></div>
 </main>
 <button class="fab" id="add" style="display:none">+ Novo pagamento</button>
@@ -64,7 +64,7 @@ window.claude={use:function(n){return new Promise(function(r){(function w(){if(w
 </script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInWithPopup,signInWithRedirect,GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getAuth,onAuthStateChanged,signInWithPopup,signOut,GoogleAuthProvider} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {initializeFirestore,persistentLocalCache,collection,doc,onSnapshot,addDoc,updateDoc,setDoc,deleteDoc,getDoc} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 /* ===== COLE AQUI A CONFIGURAÇÃO DO SEU PROJETO FIREBASE ===== */
 const cfg={apiKey:"AIzaSyBBs2pK94-brwfjFwypE87yvK8HlBRlPB0",authDomain:"contas-familia-a2add.firebaseapp.com",projectId:"contas-familia-a2add",appId:"1:1085801598921:web:b716961162f3497c45a218"};
@@ -83,8 +83,10 @@ function mk(user){
 onAuthStateChanged(auth,async u=>{
   if(!u){L.style.display="flex";return}
   L.style.display="none";
-  try{await setDoc(doc(fs,"users",u.uid),{name:u.displayName||u.email})}catch(e){}
-  window.__fbUse=mk(u)});
+  window.__fbUse=mk(u);
+  setDoc(doc(fs,"users",u.uid),{name:u.displayName||u.email}).catch(function(){});
+  if(!document.getElementById("who")){document.querySelector("main h1").insertAdjacentHTML("afterend",'<div class="sub" id="who" style="margin:-6px 0 8px"></div>');const W=document.getElementById("who");W.textContent=(u.email||"")+" · ";const k=document.createElement("a");k.href="#";k.textContent="Sair";k.onclick=e=>{e.preventDefault();signOut(auth).then(()=>location.reload())};W.appendChild(k)}
+});
 </script>
 <script>
 var $=function(s){return document.querySelector(s)};
